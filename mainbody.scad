@@ -26,36 +26,89 @@ module mainbody() {
         
         // Power plug opening USB3 Type C
         // TODO: Confirm rounding radius
-        portwidth = 11;
-        translate([thickness / 2 + 7.7 + 3.5 - portwidth / 2, -1, thickness / 2 + 2.5])
-        //color("red") cube([portwidth, 3.5, 6]);
-        color("red") roundedcube([portwidth, thickness + 2, 6], radius = 3, apply_to = "y");
+        portwidth = 11.5;
+        translate([thickness / 2 + 7.7 + 3.5 + 2.8 - portwidth / 2, -1, thickness / 2 + 2.5])
+        color("red") roundedcube([portwidth, thickness + 2, 6.5], radius = 3, apply_to = "y");
         
-        // Bottom air vents
-        // TODO: Consider side air vents instead? Bottom vents without a stand won't work on flat surfaces
-        // and printing with a stand would take longer
-        // TODO: Also make sure the vents are aligned between the posts, higher thicknesses will
-        // currently bring them out of proper alignment
-        /* Removing in preference of side air vents
-        for (r = [0 : 6]) {
-            for (c = [0 : 8]) {
-                color("red")
-                translate([3.5 + 2.8 + 6 + c*6, 3.5 + 2.3 + 6 +r*6, -1])
-                cube([2, 2, thickness + 2]);
+        // Mini HDMI port 0
+        if (enable_hdmi0)
+        translate([thickness / 2 + 7.7 + 3.5 + 2.8 + 14.8 - 13.5 / 2, -1, thickness / 2 + 2.5])
+        color("red") roundedcube([13.5, thickness + 2, 8.0], radius = 1, apply_to = "y");
+        
+        // Mini HDMI port 1
+        if (enable_hdmi1)
+        translate([thickness / 2 + 7.7 + 3.5 + 2.8 + 14.8 + 13.5 - 13 / 2, -1, thickness / 2 + 2.5])
+        color("red") roundedcube([13.5, thickness + 2, 8.0], radius = 1, apply_to = "y");
+        
+        // If both HDMI0 and HDMI1 are enabled, the middle bit is only good for printing support so just remove it
+        if (enable_hdmi0 && enable_hdmi1)
+        translate([thickness / 2 + 7.7 + 3.5 + 2.8 + 14.8 - 13.5 / 2, -1, thickness / 2 + 2.5])
+        color("maroon") roundedcube([13.5*2, thickness + 2, 8.0], radius = 1, apply_to = "y");
+        
+        // Side fan vent holes and screw holes
+        slats = 6;
+        if (enable_fan)
+        color("red") translate([mainsize.x / 2, mainsize.y - thickness/2, 35]) {
+            difference() {
+                rotate([90, 0, 0]) cylinder(thickness + 0.01, 15, 15, center=true);
+                rotate([0, 45, 0])
+                for (r = [0 : slats]) {
+                    for (c = [0 : slats]) {
+                        translate([r*(30 - thickness)/slats - 15 - thickness / 2, 0, -15]) {
+                            cube([thickness / 2, thickness, 30]);
+                        }
+                    }
+                }
+                rotate([0, -45, 0])
+                for (r = [0 : slats]) {
+                    for (c = [0 : slats]) {
+                        translate([r*(30 - thickness)/slats - 15 - thickness / 2, 0, -15]) {
+                            cube([thickness / 2, thickness, 30]);
+                        }
+                    }
+                }
+                rotate([90, 0, 0]) cylinder(thickness + 0.02, 17.5/2, 17.5/2, center=true);
             }
+            // Screw holes
+            rotate([90, 0, 0]) translate([-15 + 1.5 + 1.25/2, -15 + 1.5 + 1.25/2, -10]) cylinder(30, 1.25, 1.25, $fn = q); // Bottom left
+            rotate([90, 0, 0]) translate([ 15 - 1.5 - 1.25/2, -15 + 1.5 + 1.25/2, -10]) cylinder(30, 1.25, 1.25, $fn = q); // Bottom right
         }
-        */
         
         // Side air vents
         for (r = [0 : 4]) {
             for (c = [0 : 4]) {
                 color("red")
-                translate([3.5 + 2.8 + 6 + c*((mainsize.x - thickness/2) / 6), -1, 3.5 + 2.3 + 6 +r*((mainsize.z - thickness/2) / 6)])
+                translate([3.5 + 2.8 + 6 + c*((mainsize.x - thickness/2 - (3.5 + 2.8 + 6)) / 5), -1, 3.5 + 2.3 + 8 +r*((mainsize.z - thickness/2 - (3.5 + 2.3 + 8)) / 5)])
                 roundedcube([3, thickness + 2, 3], radius=1.5, apply_to="y");
-                //cube([2, thickness + 2, 2]);
+            }
+        }
+
+        if (enable_clipjoints)
+        color("red") rotate([180, 0, 0]) translate([0, -mainsize.y, -thickness/2 -mainsize.z]) {
+            translate([mainsize.x / 2 - 10/2, 0, thickness/2]) {
+                // Note: intentionally offset slightly closer for looser tolerances
+                translate([10, 0.5, 0]) clipjoint_divot(10, thickness); // Front right
+                translate([-10, 0.5, 0]) clipjoint_divot(10, thickness); // Front left
+                translate([10, mainsize.y - 0.5, 0]) rotate([0, 0, 180]) clipjoint_divot(10, thickness); // Back middle
+                translate([10, 1.0, 0]) clipjoint_divot(10, thickness); // Front right
+                translate([-10, 1.0, 0]) clipjoint_divot(10, thickness); // Front left
+                translate([10, mainsize.y - 1.0, 0]) rotate([0, 0, 180]) clipjoint_divot(10, thickness); // Back middle
             }
         }
     }
+    
+    // Visualisation of the fan
+    if ($preview && enable_fan)
+    color("orange", 0.25) translate([mainsize.x / 2, mainsize.y - thickness/2 - 7.3/2, 35])
+    difference() {
+        roundedcube([30, 7.3, 30], radius=1.5, apply_to="y", center=true);
+        rotate([90, 0, 0]) {
+            translate([-15 + 1.5 + 1.25/2,  15 - 1.5 - 1.25/2, -10]) cylinder(30, 1.25, 1.25, $fn = q); // Top left
+            translate([ 15 - 1.5 - 1.25/2,  15 - 1.5 - 1.25/2, -10]) cylinder(30, 1.25, 1.25, $fn = q); // Top right
+            translate([-15 + 1.5 + 1.25/2, -15 + 1.5 + 1.25/2, -10]) cylinder(30, 1.25, 1.25, $fn = q); // Bottom left
+            translate([ 15 - 1.5 - 1.25/2, -15 + 1.5 + 1.25/2, -10]) cylinder(30, 1.25, 1.25, $fn = q); // Bottom right
+        }
+     }
 
     /* Experimental mount position for camera module -- not likely to work due to clearance requirements with the board
     translate([thickness / 2, thickness / 2, thickness / 2]) {
@@ -68,16 +121,50 @@ module mainbody() {
         }
     }
     */
+     
+    if (enable_dovetail) {
+        color("cyan") translate([mainsize.x / 2 - 10/2, -0.01, mainsize.z]) {
+            translate([-30, 0, 0]) cube([10, thickness / 2 + 0.01, thickness / 2 + 0.02]);
+            translate([-10, 0, 0]) cube([10, thickness / 2 + 0.01, thickness / 2 + 0.02]);
+            translate([10, 0, 0]) cube([10, thickness / 2 + 0.01, thickness / 2 + 0.02]);
+            translate([30, 0, 0]) cube([10, thickness / 2 + 0.01, thickness / 2 + 0.02]);
+        }
+        color("cyan") translate([mainsize.x / 2 - 10/2, mainsize.y - thickness/2 + 0.01, mainsize.z]) {
+            translate([-20, 0, 0]) cube([10, thickness / 2 + 0.01, thickness / 2 + 0.02]);
+            translate([20, 0, 0]) cube([10, thickness / 2 + 0.01, thickness / 2 + 0.02]);
+            cube([10, thickness / 2 + 0.01, thickness / 2 + 0.02]);
+        }
+    }
+    
+    if (enable_braces) color("olive") union() {
+        // Left side
+        translate([-thickness/2, mainsize.y/2 - 3/2 + 24, 0]) cube([thickness/2, 3, mainsize.z]);
+        translate([-thickness/2, mainsize.y/2 - 3/2 + 16, 0]) cube([thickness/2, 3, mainsize.z]);
+        translate([-thickness/2, mainsize.y/2 - 3/2 + 8,  0]) cube([thickness/2, 3, mainsize.z]);
+        translate([-thickness/2, mainsize.y/2 - 3/2    ,  0]) cube([thickness/2, 3, mainsize.z]);
+        translate([-thickness/2, mainsize.y/2 - 3/2 - 8,  0]) cube([thickness/2, 3, mainsize.z]);
+        translate([-thickness/2, mainsize.y/2 - 3/2 - 16, 0]) cube([thickness/2, 3, mainsize.z]);
+        translate([-thickness/2, mainsize.y/2 - 3/2 - 24, 0]) cube([thickness/2, 3, mainsize.z]);
+        // Right side
+        translate([mainsize.x, mainsize.y/2 - 3/2 + 24, 0]) cube([thickness/2, 3, mainsize.z]);
+        translate([mainsize.x, mainsize.y/2 - 3/2 + 16, 0]) cube([thickness/2, 3, mainsize.z]);
+        translate([mainsize.x, mainsize.y/2 - 3/2 + 8,  0]) cube([thickness/2, 3, mainsize.z]);
+        translate([mainsize.x, mainsize.y/2 - 3/2    ,  0]) cube([thickness/2, 3, mainsize.z]);
+        translate([mainsize.x, mainsize.y/2 - 3/2 - 8,  0]) cube([thickness/2, 3, mainsize.z]);
+        translate([mainsize.x, mainsize.y/2 - 3/2 - 16, 0]) cube([thickness/2, 3, mainsize.z]);
+        translate([mainsize.x, mainsize.y/2 - 3/2 - 24, 0]) cube([thickness/2, 3, mainsize.z]);
+        // TODO Back and front sides, reduce quantity for left and right sides?
+    }
 
     // Posts which the board will rest on without using screws
     translate([thickness / 2, thickness / 2, thickness / 2]) {
         // 2.8mm added to x for SD card clearance
         // 2.3mm added to y for audio jack clearance
         // 3.5mm distance of holes from edge of board
-        // Getting rid of the posts because they're not required and too fragile with PLA at this diameter
-        //translate([3.5 + 2.8,        3.5 + 2.3,        0]) post(); // bottom left
-        //translate([3.5 + 2.8 + 58.0, 3.5 + 2.3,        0]) post(); // bottom right
-        //translate([3.5 + 2.8,        3.5 + 2.3 + 49.0, 0]) post(); // top left
-        //translate([3.5 + 2.8 + 58.0, 3.5 + 2.3 + 49.0, 0]) post(); // top right
+        // Posts are back because they do add some stability to the RPi, might remove them again
+        translate([3.5 + 2.8,        3.5 + 2.3,        0]) post(); // bottom left
+        translate([3.5 + 2.8 + 58.0, 3.5 + 2.3,        0]) post(); // bottom right
+        translate([3.5 + 2.8,        3.5 + 2.3 + 49.0, 0]) post(); // top left
+        translate([3.5 + 2.8 + 58.0, 3.5 + 2.3 + 49.0, 0]) post(); // top right
     }
 }
