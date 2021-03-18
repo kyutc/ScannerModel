@@ -70,8 +70,8 @@ module mainbody() {
                 rotate([90, 0, 0]) cylinder(thickness + 0.02, 17.5/2, 17.5/2, center=true);
             }
             // Screw holes
-            rotate([90, 0, 0]) translate([-15 + 1.5 + 1.25/2, -15 + 1.5 + 1.25/2, -10]) cylinder(30, 1.25, 1.25, $fn = q); // Bottom left
-            rotate([90, 0, 0]) translate([ 15 - 1.5 - 1.25/2, -15 + 1.5 + 1.25/2, -10]) cylinder(30, 1.25, 1.25, $fn = q); // Bottom right
+            rotate([90, 0, 0]) translate([-15 + 1.5 + 1.25, -15 + 1.5 + 1.25, -10]) cylinder(30, 1.25, 1.25, $fn = q); // Bottom left
+            rotate([90, 0, 0]) translate([ 15 - 1.5 - 1.25, -15 + 1.5 + 1.25, -10]) cylinder(30, 1.25, 1.25, $fn = q); // Bottom right
         }
         
         // Side air vents
@@ -100,10 +100,10 @@ module mainbody() {
     difference() {
         roundedcube([30, 7.3, 30], radius=1.5, apply_to="y", center=true);
         rotate([90, 0, 0]) {
-            translate([-15 + 1.5 + 1.25/2,  15 - 1.5 - 1.25/2, -10]) cylinder(30, 1.25, 1.25, $fn = q); // Top left
-            translate([ 15 - 1.5 - 1.25/2,  15 - 1.5 - 1.25/2, -10]) cylinder(30, 1.25, 1.25, $fn = q); // Top right
-            translate([-15 + 1.5 + 1.25/2, -15 + 1.5 + 1.25/2, -10]) cylinder(30, 1.25, 1.25, $fn = q); // Bottom left
-            translate([ 15 - 1.5 - 1.25/2, -15 + 1.5 + 1.25/2, -10]) cylinder(30, 1.25, 1.25, $fn = q); // Bottom right
+            translate([-15 + 1.5 + 1.25,  15 - 1.5 - 1.25, -10]) cylinder(30, 1.25, 1.25, $fn = q); // Top left
+            translate([ 15 - 1.5 - 1.25,  15 - 1.5 - 1.25, -10]) cylinder(30, 1.25, 1.25, $fn = q); // Top right
+            translate([-15 + 1.5 + 1.25, -15 + 1.5 + 1.25, -10]) cylinder(30, 1.25, 1.25, $fn = q); // Bottom left
+            translate([ 15 - 1.5 - 1.25, -15 + 1.5 + 1.25, -10]) cylinder(30, 1.25, 1.25, $fn = q); // Bottom right
         }
      }
 
