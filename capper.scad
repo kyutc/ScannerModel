@@ -62,7 +62,7 @@ module capper() {
             cube([thickness / 2, prismhole.y, 10], center=true);
         }
         color("orange", 0.25) translate([0, 0, -500.01]) cube(500); // Remove excess from bottom
-        color("cyan") translate([0, 0, thickness / 2 + 3]) cube(500); // Trim the tops of the fins to be flat on the XY plane
+        color("cyan") translate([0, 0, thickness / 2 + 1.5]) cube(500); // Trim the tops of the fins to be flat on the XY plane
     }
     
     // The camera post
