@@ -35,10 +35,10 @@ module clipjoint(w = 10, r = thickness) {
 // Intended to be used with difference() to create the hole for a clipjoint to insert into
 module clipjoint_divot(w = 10, r = thickness) {
     hull() {
-        translate([w/2/2 - 0.25, r, r*2 - r/2 - 0.25])
+        translate([w/2/2 - 0.25, r + 0.25, r*2 - r/2 - 0.25])
         rotate([90, 0, 90])
         cylinder(w/2 + 0.5, r/2 + 0.5, r/2 + 0.5);
-        translate([w/2/2 - 0.25, -r, r*2 - r/2 - 0.25])
+        translate([w/2/2 - 0.25, -r - 0.25, r*2 - r/2 - 0.25])
         rotate([90, 10, 90])
         cylinder(w/2 + 0.5, r/2 + 0.5, r/2 + 0.5);
     }
