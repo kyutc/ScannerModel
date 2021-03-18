@@ -14,8 +14,8 @@ module print_layout() {
     translate([0, mainsize.y + 15, 0]) capper();
 }
 
-//built_preview();
+built_preview();
 //print_layout();
 
 //mainbody();
-capper();
+//capper();

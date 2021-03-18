@@ -18,13 +18,28 @@ module frictionjoint(size = 10, height = 5, overhang = 0.15) {
 module clipjoint(w = 10, r = thickness) {
     union() {
         cube([w, r/2, r*2]);
-        translate([w/2/2, 0, r*2 - r/2]) rotate([90, 0, 90]) cylinder(w/2, r/2, r/2);
+        translate([0,           0, 0]) cube([r/2, r, r*2]);
+        translate([w/2 - r/2/2, 0, 0]) cube([r/2, r, r*2]);
+        translate([w - r/2,     0, 0]) cube([r/2, r, r*2]);
+        hull() {
+            translate([w/2/2, 0, r*2 - r/2])
+            rotate([90, 0, 90])
+            cylinder(w/2, r/2, r/2);
+            translate([w/2/2, -r/2, r*2 - r/2])
+            rotate([90, 10, 90])
+            cylinder(w/2, r/2, r/2);
+        }
     }
 }
 
 // Intended to be used with difference() to create the hole for a clipjoint to insert into
 module clipjoint_divot(w = 10, r = thickness) {
-    translate([w/2/2, 0, r*2 - r/2])
-    rotate([90, 0, 90])
-    cylinder(w/2, r/2, r/2);
+    hull() {
+        translate([w/2/2 - 0.25, r, r*2 - r/2 - 0.25])
+        rotate([90, 0, 90])
+        cylinder(w/2 + 0.5, r/2, r/2);
+        translate([w/2/2 - 0.25, -r, r*2 - r/2 - 0.25])
+        rotate([90, 10, 90])
+        cylinder(w/2 + 0.5, r/2 + 0.5, r/2 + 0.5);
+    }
 }

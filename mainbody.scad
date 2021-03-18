@@ -87,12 +87,9 @@ module mainbody() {
         color("red") rotate([180, 0, 0]) translate([0, -mainsize.y, -thickness/2 -mainsize.z]) {
             translate([mainsize.x / 2 - 10/2, 0, thickness/2]) {
                 // Note: intentionally offset slightly closer for looser tolerances
-                translate([10, 0.5, 0]) clipjoint_divot(10, thickness); // Front right
-                translate([-10, 0.5, 0]) clipjoint_divot(10, thickness); // Front left
-                translate([10, mainsize.y - 0.5, 0]) rotate([0, 0, 180]) clipjoint_divot(10, thickness); // Back middle
-                translate([10, 1.0, 0]) clipjoint_divot(10, thickness); // Front right
-                translate([-10, 1.0, 0]) clipjoint_divot(10, thickness); // Front left
-                translate([10, mainsize.y - 1.0, 0]) rotate([0, 0, 180]) clipjoint_divot(10, thickness); // Back middle
+                translate([10, thickness/2, 0]) clipjoint_divot(10, thickness); // Front right
+                translate([-10, thickness/2, 0]) clipjoint_divot(10, thickness); // Front left
+                translate([10, mainsize.y - thickness/2, 0]) rotate([0, 0, 180]) clipjoint_divot(10, thickness); // Back middle
             }
         }
     }
