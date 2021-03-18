@@ -77,6 +77,7 @@ module mainbody() {
         // Side air vents
         for (r = [0 : 4]) {
             for (c = [0 : 4]) {
+                if ((r != 4)|| (c != 2))
                 color("red")
                 translate([3.5 + 2.8 + 6 + c*((mainsize.x - thickness/2 - (3.5 + 2.8 + 6)) / 5), -1, 3.5 + 2.3 + 8 +r*((mainsize.z - thickness/2 - (3.5 + 2.3 + 8)) / 5)])
                 roundedcube([3, thickness + 2, 3], radius=1.5, apply_to="y");
