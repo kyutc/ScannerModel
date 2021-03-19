@@ -5,8 +5,9 @@ cameraPostHeight=40;
 // 23mm added for RPi board clearance. Technically correct solution would be cameraPostHeight plus sqrt(b^2+c^2) minus intersection of the camera mount but that would be a hassle
 mainsize = [101.0 + thickness, 58.5 + thickness, cameraPostHeight + thickness + 23];
 camerasize = [23.8, 25.5, thickness];
-q = 8; // render quality, low for preview high for render
-$fs = 1; // low for high quality, high for low quality
+
+q = $preview ? 8 : 256;
+$fs = $preview ? 1 : 0.01;
 
 txtversion = "R13";
 preview_cut = false;
