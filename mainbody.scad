@@ -75,12 +75,14 @@ module mainbody() {
         }
         
         // Side air vents
-        for (r = [0 : 4]) {
-            for (c = [0 : 4]) {
-                if ((r != 4)|| (c != 2))
+        for (r = [-1 : 1]) {
+            for (c = [-3 : 3]) {
                 color("red")
-                translate([3.5 + 2.8 + 6 + c*((mainsize.x - thickness/2 - (3.5 + 2.8 + 6)) / 5), -1, 3.5 + 2.3 + 8 +r*((mainsize.z - thickness/2 - (3.5 + 2.3 + 8)) / 5)])
-                roundedcube([3, thickness + 2, 3], radius=1.5, apply_to="y");
+                translate([mainsize.x / 2, 0, mainsize.z / 2]) {
+                    translate([c*((mainsize.x - thickness/2 - (10)) / 7), thickness/2/2 - 0.01, r*((mainsize.z - thickness/2 - (26)) / 3)])
+                    rotate([90, 0, 00])
+                    cylinder(thickness/2 + 0.05, 1.5 + 0.10*(abs(c) + abs(r)), 1.5 + 0.10*(abs(c) + abs(r)), center=true);
+                }
             }
         }
 
