@@ -41,8 +41,8 @@ module capper() {
     if (enable_clipjoints)
     color("teal")
     translate([mainsize.x / 2 - 10/2, 0, thickness/2]) {
-        translate([10, thickness/2 + 0.5, 0]) clipjoint(10, thickness); // Front right
-        translate([-10, thickness/2 + 0.5, 0]) clipjoint(10, thickness); // Front left
+        translate([38, thickness/2 + 0.5, 0]) clipjoint(10, thickness); // Front right
+        translate([-38, thickness/2 + 0.5, 0]) clipjoint(10, thickness); // Front left
         translate([10, mainsize.y - thickness/2 - 0.5, 0]) rotate([0, 0, 180]) clipjoint(10, thickness); // Back middle
     }
     
