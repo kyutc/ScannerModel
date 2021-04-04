@@ -16,6 +16,13 @@ module capper() {
             cube(prismhole, center=true);
         }
     }
+    
+//ledmount   
+translate([90,30.5,21])
+difference() {
+        cube(center=true,[7,10,40]); //cube placment
+        rotate([0,45,0]) translate([-5,0,-5]) cylinder(r=3,h=90,$fn=100) ; //clear cylinder at 45 degree angle
+    }
 
     difference() {
         // Top cover
@@ -105,7 +112,7 @@ module capper() {
     // Version
     color("brown") translate([mainsize.x - thickness / 2 - 18, mainsize.y - thickness / 2 - 26, thickness / 2])
     linear_extrude(1) {
-        text(txtversion, 8, "Bahnschrift");
+        text(txtversion, 7, "Bahnschrift");
     }
     
     // Friction joints. Uses the "flex" of PLA to create a friction joint. PETG would also work and have greater strength and allow larger overhang values
