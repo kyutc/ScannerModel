@@ -110,7 +110,7 @@ difference() {
     }
 
     // Version
-    color("brown") translate([mainsize.x - thickness / 2 - 18, mainsize.y - thickness / 2 - 26, thickness / 2])
+    color("brown") translate([mainsize.x - thickness / 2 - 17, mainsize.y - thickness / 2 - 20, thickness / 2])
     linear_extrude(1) {
         text(txtversion, 7, "Bahnschrift");
     }
