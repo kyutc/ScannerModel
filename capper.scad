@@ -16,6 +16,14 @@ module capper() {
             cube(prismhole, center=true);
         }
     }
+    
+    
+//secureprism
+translate ([35,13,-2]) //adding outer lip to capper lid so prism does not fall out
+difference() {
+ cube ([55,35.4,4]);
+    translate ([4,5,-2]) cube ([47, 25, 10]);
+}
 
     difference() {
         // Top cover
