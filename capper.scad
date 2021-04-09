@@ -17,11 +17,16 @@ module capper() {
         }
     }
     
-//ledmount   
-translate([90,30.5,21])
-difference() {
-        cube(center=true,[7,10,40]); //cube placment
-        rotate([0,45,0]) translate([-5,0,-5]) cylinder(r=3,h=90,$fn=100) ; //clear cylinder at 45 degree angle
+    // LED Mount
+    if (enable_ledmount)
+    difference() {
+        translate([prismorigin.x + sqrt(pow(prismhole.x, 2)+pow(prismhole.z, 2))/2 + 7/2 + 5, mainsize.y/2, thickness/2 + 40/2])
+        cube([7, 10, 40], center=true);
+
+        color("red")
+        translate([prismorigin.x, prismorigin.y , 0])
+        rotate([0, 45, 0])
+        cylinder(r=3, h=500, center=true);
     }
 
     difference() {

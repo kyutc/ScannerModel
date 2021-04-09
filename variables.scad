@@ -9,7 +9,7 @@ camerasize = [23.8, 25.5, thickness];
 q = $preview ? 8 : 256;
 $fs = $preview ? 1 : 0.01;
 
-txtversion = "R13";
+txtversion = "R14";
 preview_cut = false;
 
 enable_camerapost = true;
@@ -19,6 +19,7 @@ enable_dovetail = false;
 enable_clipjoints = true;
 enable_fan = true;
 enable_braces = false; // Braces are incomplete and untested
+enable_ledmount = true;
 
 // HDMI0 and HDMI1 are labelled on the RPi board
 enable_hdmi0 = true;
