@@ -59,24 +59,22 @@ module capper() {
     
     // Add "fins" to the prism hole to ensure it stays put with a looser fit
     if (enable_fins)
-    union() {
-        difference() {
-            union() {
-                // TODO: Find the source of the slight intersection of the fins with the prism. Is this due to the skew of the rotation vs. the origin and the distance to the hypotenuse combined with the thickness of the fins?
-                color("cyan")
-                translate([prismorigin.x - sqrt(pow(prismhole.x, 2)+pow(prismhole.z, 2))/2 + (thickness / 2 - (thickness / 2) / (thickness / 2)), prismorigin.y, thickness / 2])
-                rotate([0, 45, 0])
-                cube([thickness / 2, prismhole.y, 10], center=true);
-                
-                color("cyan")
-                translate([prismorigin.x + sqrt(pow(prismhole.x, 2)+pow(prismhole.z, 2))/2 - (thickness / 2 - (thickness / 2) / (thickness / 2)), prismorigin.y, thickness / 2])
-                rotate([0, -45, 0])
-                cube([thickness / 2, prismhole.y, 10], center=true);
-            }
-            color("orange", 0.25) translate([0, 0, -500.01]) cube(500); // Remove excess from bottom
-            color("cyan") translate([0, 0, thickness / 2 + 3]) cube(500); // Trim the tops of the fins to be flat on the XY plane
-            color("blue") translate([0, mainsize.y / 2 - (prismhole.y - 6)/2, thickness / 2 + 0.01]) cube([200, prismhole.y - 6, 50]);
+    difference() {
+        union() {
+            // TODO: Find the source of the slight intersection of the fins with the prism. Is this due to the skew of the rotation vs. the origin and the distance to the hypotenuse combined with the thickness of the fins?
+            color("cyan")
+            translate([prismorigin.x - sqrt(pow(prismhole.x, 2)+pow(prismhole.z, 2))/2 + (thickness / 2 - (thickness / 2) / (thickness / 2)), prismorigin.y, thickness / 2])
+            rotate([0, 45, 0])
+            cube([thickness / 2, prismhole.y, 10], center=true);
+            
+            color("cyan")
+            translate([prismorigin.x + sqrt(pow(prismhole.x, 2)+pow(prismhole.z, 2))/2 - (thickness / 2 - (thickness / 2) / (thickness / 2)), prismorigin.y, thickness / 2])
+            rotate([0, -45, 0])
+            cube([thickness / 2, prismhole.y, 10], center=true);
         }
+        color("orange", 0.25) translate([0, 0, -500.01]) cube(500); // Remove excess from bottom
+        color("cyan") translate([0, 0, thickness / 2 + 3]) cube(500); // Trim the tops of the fins to be flat on the XY plane
+        color("blue") translate([0, mainsize.y / 2 - (prismhole.y - 6)/2, thickness / 2 + 0.01]) cube([200, prismhole.y - 6, 50]);
     }
     
     if (enable_wings)
