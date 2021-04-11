@@ -2,15 +2,14 @@ include <variables.scad>
 use <inc.scad>
 
 // Can add ~0.25-0.5mm to adjust for accuracy, however thickness must be increased otherwise the prism will easily fall through
-prismhole=[30.2, 30.4, 30.2];
+prismhole=[30.3, 30.4, 30.3];
 prismorigin=[mainsize.x / 2 + 10, mainsize.y / 2, 0];
 
 // Note: this model is upside down
 module capper() {
     // Slot for gravity hold of prism
-    module prism() difference() {
-        color ("red") union() {
-            // TODO: The prism can be moved away from the camera post to get a better 45-degree angle but then it won't be in the center.
+    module prism() {
+        color("red") {
             translate(prismorigin)
             rotate([0, 45, 0])
             cube(prismhole, center=true);
@@ -24,7 +23,7 @@ module capper() {
         cube([7, 10, 40], center=true);
 
         color("red")
-        translate([prismorigin.x, prismorigin.y , 0])
+        translate([prismorigin.x, prismorigin.y , prismorigin.z])
         rotate([0, 45, 0])
         cylinder(r=3, h=500, center=true);
     }
@@ -60,21 +59,53 @@ module capper() {
     
     // Add "fins" to the prism hole to ensure it stays put with a looser fit
     if (enable_fins)
-    difference() {
-        union() {
-            // TODO: Find the source of the slight intersection of the fins with the prism. Is this due to the skew of the rotation vs. the origin and the distance to the hypotenuse combined with the thickness of the fins?
-            color("cyan")
-            translate([prismorigin.x - sqrt(pow(prismhole.x, 2)+pow(prismhole.z, 2))/2 + (thickness / 2 - (thickness / 2) / (thickness / 2)), prismorigin.y, thickness / 2])
-            rotate([0, 45, 0])
-            cube([thickness / 2, prismhole.y, 10], center=true);
-            
-            color("cyan")
-            translate([prismorigin.x + sqrt(pow(prismhole.x, 2)+pow(prismhole.z, 2))/2 - (thickness / 2 - (thickness / 2) / (thickness / 2)), prismorigin.y, thickness / 2])
-            rotate([0, -45, 0])
-            cube([thickness / 2, prismhole.y, 10], center=true);
+    union() {
+        difference() {
+            union() {
+                // TODO: Find the source of the slight intersection of the fins with the prism. Is this due to the skew of the rotation vs. the origin and the distance to the hypotenuse combined with the thickness of the fins?
+                color("cyan")
+                translate([prismorigin.x - sqrt(pow(prismhole.x, 2)+pow(prismhole.z, 2))/2 + (thickness / 2 - (thickness / 2) / (thickness / 2)), prismorigin.y, thickness / 2])
+                rotate([0, 45, 0])
+                cube([thickness / 2, prismhole.y, 10], center=true);
+                
+                color("cyan")
+                translate([prismorigin.x + sqrt(pow(prismhole.x, 2)+pow(prismhole.z, 2))/2 - (thickness / 2 - (thickness / 2) / (thickness / 2)), prismorigin.y, thickness / 2])
+                rotate([0, -45, 0])
+                cube([thickness / 2, prismhole.y, 10], center=true);
+            }
+            color("orange", 0.25) translate([0, 0, -500.01]) cube(500); // Remove excess from bottom
+            color("cyan") translate([0, 0, thickness / 2 + 3]) cube(500); // Trim the tops of the fins to be flat on the XY plane
+            color("blue") translate([0, mainsize.y / 2 - (prismhole.y - 6)/2, thickness / 2 + 0.01]) cube([200, prismhole.y - 6, 50]);
         }
-        color("orange", 0.25) translate([0, 0, -500.01]) cube(500); // Remove excess from bottom
-        color("cyan") translate([0, 0, thickness / 2 + 3]) cube(500); // Trim the tops of the fins to be flat on the XY plane
+    }
+    
+    if (enable_wings)
+    difference() {
+        // Solid oversized prism
+        color("cyan")
+        translate(prismorigin)
+        rotate([0, 45, 0])
+        cube([prismhole.x + thickness, prismhole.y + thickness, prismhole.z + thickness], center=true);
+        
+        // Make it hollow
+        color("red")
+        translate(prismorigin)
+        rotate([0, 45, 0])
+        cube([prismhole.x, prismhole.y, prismhole.z], center=true);
+        
+        // Cut out the top, leave the sides and some of the "fins"
+        color("red")
+        translate([prismorigin.x, prismorigin.y, prismorigin.z + prismhole.z/2 + thickness/2 + 3])
+        cube([prismhole.x + 20, prismhole.y, prismhole.z], center=true);
+        
+        // Cut out excess of the fins to avoid occluding the camera, and remove excess on sides while keeping enough for
+        // structural support
+        color("blue") translate([0, mainsize.y / 2 - (prismhole.y - 6)/2, thickness / 2 + 0.01]) cube([200, prismhole.y - 6, 50]);
+        color("blue") translate([0, thickness / 2 + 0.01, mainsize.z / 2 - (prismhole.z - 6)/2]) cube([200, 50, 0]);
+        color("cyan") translate([0, 0, thickness / 2 + 3]) cube(500);
+
+        
+        color("orange") translate([0, 0, -499.99]) cube(500); // Remove excess from bottom
     }
     
     // The camera post
@@ -146,22 +177,22 @@ module capper() {
                 color("orange", 0.25) prism();
                 // Measuring stick 30 and 60mm from the face of the prism is required for optimal focus
                 color ("pink", 0.25) union() {
-                    translate([prismorigin.x, prismorigin.y , 0])
+                    translate([prismorigin.x, prismorigin.y , prismorigin.z])
                     rotate([0, 45, 0])
                     cube([1, 1, 30 + 60*2], center=true);
                 }
                 color ("pink", 0.25) union() {
-                    translate([prismorigin.x, prismorigin.y , 0])
+                    translate([prismorigin.x, prismorigin.y , prismorigin.z])
                     rotate([0, -45, 0])
                     cube([1, 1, 30 + 60*2], center=true);
                 }
                 color ("red", 0.25) union() {
-                    translate([prismorigin.x, prismorigin.y , 0])
+                    translate([prismorigin.x, prismorigin.y , prismorigin.z])
                     rotate([0, 45, 0])
                     cube([1.01, 1.01, 30 + 60], center=true);
                 }
                 color ("red", 0.25) union() {
-                    translate([prismorigin.x, prismorigin.y , 0])
+                    translate([prismorigin.x, prismorigin.y , prismorigin.z])
                     rotate([0, -45, 0])
                     cube([1.01, 1.01, 30 + 60], center=true);
                 }

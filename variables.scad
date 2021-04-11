@@ -9,11 +9,12 @@ camerasize = [23.8, 25.5, thickness];
 q = $preview ? 8 : 256;
 $fs = $preview ? 1 : 0.01;
 
-txtversion = "R14";
+txtversion = "R15";
 preview_cut = false;
 
 enable_camerapost = true;
-enable_fins = true;
+enable_fins = false;
+enable_wings = true;
 enable_frictionjoints = false;
 enable_dovetail = false;
 enable_clipjoints = true;
